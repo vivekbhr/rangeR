@@ -90,7 +90,7 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
 #' divergent_merged <- mergeRanges(divergent)
 #'
 
-mergeRanges <- function(rlist, filterGenes, lengthCutoff = 2000) {
+mergeRanges <- function(rlist, filterGenes = NA, lengthCutoff = 2000) {
         chroms <- seqnames(rlist$GR.plus)
         starts <- pmin(min(ranges(rlist$GR.plus)), min(ranges(rlist$GR.minus)) )
         ends <- pmax(max(ranges(rlist$GR.plus)), max(ranges(rlist$GR.minus)) )
@@ -100,7 +100,9 @@ mergeRanges <- function(rlist, filterGenes, lengthCutoff = 2000) {
         out <- out[order(out$score)]
         out <- out[out$score <= lengthCutoff]
         # remove regions overlapping with any gene (>5bp)
-        remove <- GenomicRanges::findOverlaps(out, filterGenes, minoverlap = 5) %>% queryHits()
-        out <- out[-remove]
+        if(!is.na(filterGenes)) {
+                remove <- GenomicRanges::findOverlaps(out, filterGenes, minoverlap = 5) %>% queryHits()
+                out <- out[-remove]
+        }
         return(out)
 }
