@@ -98,9 +98,9 @@ mergeRanges <- function(rlist, filterGenes, lengthCutoff = 2000) {
         # make intergenic distance as scores and sort by it
         out$score <- distance(rlist$GR.plus, rlist$GR.minus, ignore.strand=TRUE)
         out <- out[order(out$score)]
-        out <- out[out$score <= cutoff]
+        out <- out[out$score <= lengthCutoff]
         # remove regions overlapping with any gene (>5bp)
-        remove <- GenomicRanges::findOverlaps(out, filtderGenes, minoverlap = 5) %>% queryHits()
+        remove <- GenomicRanges::findOverlaps(out, filterGenes, minoverlap = 5) %>% queryHits()
         out <- out[-remove]
         return(out)
 }
