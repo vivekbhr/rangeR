@@ -18,25 +18,25 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
 
         if(direction == "divergent") {
                 # Fix everything to start/end 1bp and check the strand of upstream genes
-                ranges.plus <- resize(ranges[strand(ranges) == "+"], width = 1, fix = "start")
+                ranges.plus <- resize(ranges[GenomicRanges::strand(ranges) == "+"], width = 1, fix = "start")
                 upstream.toplus <- follow(ranges.plus, ranges, ignore.strand = TRUE)
                 # remove na Entries from query and return entries from subject that have a hit
                 ranges.plus <- ranges.plus[-which(is.na(upstream.toplus))]
                 upstream.toplus <- ranges[na.omit(upstream.toplus)]
                 # out of these, only keep -ve strand entries
-                minus <- which(strand(upstream.toplus) == "-")
+                minus <- which(GenomicRanges::strand(upstream.toplus) == "-")
                 ranges.minus <- resize(upstream.toplus[minus], width = 1, fix = "start")
                 # only keep queries which have -ve strand in subject
                 ranges.plus <- ranges.plus[minus]
         } else
                 if(direction == "convergent") {
                         # same as above
-                        ranges.minus <- resize(ranges[strand(ranges) == "-"],width = 1, fix = "end")
+                        ranges.minus <- resize(ranges[GenomicRanges::strand(ranges) == "-"],width = 1, fix = "end")
                         upstream.tominus <- follow(ranges.minus, ranges, ignore.strand = TRUE)
                         ranges.minus <- ranges.minus[-which(is.na(upstream.tominus))]
                         upstream.tominus <- ranges[na.omit(upstream.tominus)]
 
-                        plus <- which(strand(upstream.tominus) == "+")
+                        plus <- which(GenomicRanges::strand(upstream.tominus) == "+")
                         ranges.plus <- resize(upstream.tominus[plus], width = 1, fix = "end")
                         ranges.minus <- ranges.minus[plus]
                 } else
@@ -53,13 +53,13 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
                                         }
 
                                         # for + , get + genes upstream and for - get -genes
-                                        ranges.plus <- resize(ranges[strand(ranges) == strand], width = 1, fix = fix1)
+                                        ranges.plus <- resize(ranges[GenomicRanges::strand(ranges) == strand], width = 1, fix = fix1)
                                         upstream.toplus <- follow(ranges.plus, ranges, ignore.strand = TRUE)
                                         # remove na Entries from query and return entries from subject that have a hit
                                         ranges.plus <- ranges.plus[-which(is.na(upstream.toplus))]
                                         upstream.toplus <- ranges[na.omit(upstream.toplus)]
                                         # out of these, only keep +ve strand entries
-                                        plusUP <- which(strand(upstream.toplus) == strand)
+                                        plusUP <- which(GenomicRanges::strand(upstream.toplus) == strand)
                                         ranges.plusUP <- resize(upstream.toplus[plusUP], width = 1, fix = fix2)
                                         # only keep queries which have -ve strand in subject
                                         ranges.plus <- ranges.plus[plusUP]
