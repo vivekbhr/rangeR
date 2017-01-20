@@ -80,7 +80,6 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
 #' @param rlist A list of GRanges
 #' @param filterRanges GRanges, If provided , the regions overlapping with these regions are removed
 #' @param lengthCutoff Only return regions upto this length (bp)
-#' @param keepOriginalPairs Keep the original pair of GRanges used to make the merged file
 #'
 #' @return GRanges object
 #' @export
@@ -91,7 +90,7 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
 #' divergent_merged <- mergeRanges(divergent)
 #'
 
-mergeRanges <- function(rlist, filterGenes = NA, lengthCutoff = 2000, keepOriginalPairs = TRUE) {
+mergeRanges <- function(rlist, filterGenes = NA, lengthCutoff = 2000) {
         chroms <- seqnames(rlist$GR.plus)
         starts <- pmin(min(ranges(rlist$GR.plus)), min(ranges(rlist$GR.minus)) )
         ends <- pmax(max(ranges(rlist$GR.plus)), max(ranges(rlist$GR.minus)) )
@@ -99,10 +98,8 @@ mergeRanges <- function(rlist, filterGenes = NA, lengthCutoff = 2000, keepOrigin
         # make intergenic distance as scores and sort by it
         out$score <- distance(rlist$GR.plus, rlist$GR.minus, ignore.strand=TRUE)
 
-        if(keepOriginalPairs) {
-                out$UPstream.Gene <- rlist$GR.plus
-                out$DOWNstream.Gene <- rlist$GR.minus
-        }
+        out$UPstream.Gene <- rlist$GR.plus$gene_id
+        out$DOWNstream.Gene <- rlist$GR.minus$gene_id
 
         out <- out[order(out$score)]
         out <- out[out$score <= lengthCutoff]

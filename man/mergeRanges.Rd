@@ -4,15 +4,12 @@
 \alias{mergeRanges}
 \title{Merge Ranges from the given list of GRanges}
 \usage{
-mergeRanges(rlist, filterGenes = NA, lengthCutoff = 2000,
-  keepOriginalPairs = TRUE)
+mergeRanges(rlist, filterGenes = NA, lengthCutoff = 2000)
 }
 \arguments{
 \item{rlist}{A list of GRanges}
 
 \item{lengthCutoff}{Only return regions upto this length (bp)}
-
-\item{keepOriginalPairs}{Keep the original pair of GRanges used to make the merged file}
 
 \item{filterRanges}{GRanges, If provided , the regions overlapping with these regions are removed}
 }
