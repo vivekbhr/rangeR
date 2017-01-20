@@ -24,7 +24,7 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
                 ranges.plus <- ranges.plus[-which(is.na(upstream.toplus))]
                 upstream.toplus <- ranges[na.omit(upstream.toplus)]
                 # out of these, only keep -ve strand entries
-                minus <- which(GenomicRanges::strand(upstream.toplus) == "-")
+                minus <- GenomicRanges::strand(upstream.toplus) == "-"
                 ranges.minus <- resize(upstream.toplus[minus], width = 1, fix = "start")
                 # only keep queries which have -ve strand in subject
                 ranges.plus <- ranges.plus[minus]
@@ -36,7 +36,7 @@ subsetRange_byGeneDirection <- function(ranges, direction = "divergent"){
                         ranges.minus <- ranges.minus[-which(is.na(upstream.tominus))]
                         upstream.tominus <- ranges[na.omit(upstream.tominus)]
 
-                        plus <- which(GenomicRanges::strand(upstream.tominus) == "+")
+                        plus <- GenomicRanges::strand(upstream.tominus) == "+"
                         ranges.plus <- resize(upstream.tominus[plus], width = 1, fix = "end")
                         ranges.minus <- ranges.minus[plus]
                 } else
