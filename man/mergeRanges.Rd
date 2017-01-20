@@ -4,7 +4,7 @@
 \alias{mergeRanges}
 \title{Merge Ranges from the given list of GRanges}
 \usage{
-mergeRanges(rlist, filterGenes, lengthCutoff = 2000)
+mergeRanges(rlist, filterGenes = NA, lengthCutoff = 2000)
 }
 \arguments{
 \item{rlist}{A list of GRanges}
