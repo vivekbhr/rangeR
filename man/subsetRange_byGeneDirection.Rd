@@ -22,4 +22,3 @@ Filter a GRanges by the direction of genes
 divergent <- subsetRange_byGeneDirection(testRanges, direction = "divergent")
 
 }
-

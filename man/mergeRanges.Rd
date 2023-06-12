@@ -25,4 +25,3 @@ divergent <- subsetRange_byGeneDirection(testRanges, direction = "divergent")
 divergent_merged <- mergeRanges(divergent)
 
 }
-
