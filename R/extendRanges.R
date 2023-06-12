@@ -18,21 +18,21 @@ make_anchored_bins <- function(anchor_gr, window_size, num_windows, ntop=NA) {
   
   ## select top 1000 peaks and intersect with genes
   if(!is.na(ntop)) {
-    prom_peaks <- prom_peaks[order(prom_peaks$score, decreasing = T)[1:ntop]]
+    anchor_gr <- anchor_gr[order(anchor_gr$score, decreasing = T)[1:ntop]]
   }
   ## make 50x 10kb bins starting from promoter peaks
-  prom_peaks <- resize(prom_peaks, window_size, fix="center")
-  prom_peaks <- prom_peaks[countOverlaps(prom_peaks, prom_peaks) == 1] # remove overlaps
+  anchor_gr <- resize(anchor_gr, window_size, fix="center")
+  anchor_gr <- anchor_gr[countOverlaps(anchor_gr, anchor_gr) == 1] # remove overlaps
   
   # 250kb window starting from each element
   windows_ext <- num_windows + 6 # to account for overlapping windows that would be removed
   nkeep <- num_windows + 1
-  window <- GRanges(seqnames(prom_peaks), IRanges(start(prom_peaks), start(prom_peaks) + (windows_ext*window_size)))
+  window <- GRanges(seqnames(anchor_gr), IRanges(start(anchor_gr), start(anchor_gr) + (windows_ext*window_size)))
   grl <- tile(window, width = window_size)
   
   # remove windows that overlap with another prom_peak and take first 51
   lapply(seq_along(grl), function(n) {
-    subset <- prom_peaks[-n]
+    subset <- anchor_gr[-n]
     gr <- grl[[n]]
     gr <- gr[!overlapsAny(gr, subset)]
     if(length(gr)>nkeep) {
@@ -43,7 +43,7 @@ make_anchored_bins <- function(anchor_gr, window_size, num_windows, ntop=NA) {
   }) -> grl_extended
   
   ## make bed 
-  names(grl_extended) <- as.character(prom_peaks)
+  names(grl_extended) <- as.character(anchor_gr)
   grl_extended <- grl_extended[sapply(grl_extended, length)==nkeep]
   gr_extended <- unlist(GRangesList(grl_extended))
   
